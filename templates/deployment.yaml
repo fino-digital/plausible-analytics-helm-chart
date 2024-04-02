@@ -184,6 +184,7 @@ spec:
             - name: GEOLITE2_COUNTRY_DB
               value: "/geoip/GeoLite2-Country.mmdb"
             {{ end }}
+            {{- toYaml .Values.extraEnv | nindent 12 }}
           ports:
             - name: http
               containerPort: 8000
@@ -235,6 +236,7 @@ spec:
 
 
       initContainers:
+        {{- toYaml .Values.extraInitContainers | nindent 8 }}
         - name: plausible-init
           securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
