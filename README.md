@@ -2,7 +2,7 @@
  
 [Plausible Analytics][] is a Simple, lightweight privacy-friendly website analytics  alternative to Google Analytics.
 
-[![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/open-8gears)](https://artifacthub.io/packages/search?repo=open-8gears)
+[![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/open-8gears)](https://artifacthub.io/packages/helm/open-8gears/plausible-analytics)
 
  
 
@@ -49,7 +49,7 @@ adminUser:
   name:   # Display name admin user
   password: # Admin user password
 
-# SECRET_KEY_BASE is Helm randAlphaNum 90
+secretKeyBase: "" # Defaults to random 90 characters alphanumeric string if not set
 
 database: # Postgres Database
   enabled: true

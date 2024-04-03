@@ -52,27 +52,8 @@ spec:
             - /entrypoint.sh
             - run
           env:
-            {{- if .Values.adminUser.email }}
-            - name: ADMIN_USER_EMAIL
-              valueFrom:
-                secretKeyRef:
-                  key: ADMIN_USER_EMAIL
-                  name: {{ include "plausible-analytics.fullname" . }}
-            {{- end }}
-            {{- if .Values.adminUser.email }}
-            - name: ADMIN_USER_NAME
-              valueFrom:
-                secretKeyRef:
-                  key: ADMIN_USER_NAME
-                  name: {{ include "plausible-analytics.fullname" . }}
-            {{- end }}
-            {{- if .Values.adminUser.email }}
-            - name: ADMIN_USER_PWD
-              valueFrom:
-                secretKeyRef:
-                  key: ADMIN_USER_PWD
-                  name: {{ include "plausible-analytics.fullname" . }}
-            {{- end }}
+            - name: SELFHOST
+              value: "true"
             {{- if .Values.google.clientID }}
             - name: GOOGLE_CLIENT_ID
               valueFrom:
@@ -184,6 +165,9 @@ spec:
             - name: GEOLITE2_COUNTRY_DB
               value: "/geoip/GeoLite2-Country.mmdb"
             {{ end }}
+            {{- if .Values.extraEnv }}
+            {{- toYaml .Values.extraEnv | nindent 12 }}
+            {{ end }}
           ports:
             - name: http
               containerPort: 8000
@@ -203,6 +187,12 @@ spec:
             httpGet:
               path: /
               port: http
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
           resources:
           {{- toYaml .Values.resources | nindent 12 }}
 
@@ -232,9 +222,10 @@ spec:
             - name: geoip
               mountPath: /usr/share/GeoIP
         {{ end }}
-
-
       initContainers:
+        {{ if .Values.extraInitContainers }}
+        {{- toYaml .Values.extraInitContainers | nindent 8 }}
+        {{ end -}}
         - name: plausible-init
           securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
@@ -244,29 +235,10 @@ spec:
             - /bin/sh
             - -x
             - -c
-            - /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh db init-admin
+            - /entrypoint.sh db createdb && /entrypoint.sh db migrate
           env:
-            {{- if .Values.adminUser.email }}
-            - name: ADMIN_USER_EMAIL
-              valueFrom:
-                secretKeyRef:
-                  key: ADMIN_USER_EMAIL
-                  name: {{ include "plausible-analytics.fullname" . }}
-            {{- end }}
-            {{- if .Values.adminUser.email }}
-            - name: ADMIN_USER_NAME
-              valueFrom:
-                secretKeyRef:
-                  key: ADMIN_USER_NAME
-                  name: {{ include "plausible-analytics.fullname" . }}
-            {{- end }}
-            {{- if .Values.adminUser.email }}
-            - name: ADMIN_USER_PWD
-              valueFrom:
-                secretKeyRef:
-                  key: ADMIN_USER_PWD
-                  name: {{ include "plausible-analytics.fullname" . }}
-            {{- end }}
+            - name: SELFHOST
+              value: "true"
             {{- if .Values.database.enabled }}
             {{- if .Values.database.url }}
             - name: DATABASE_URL
