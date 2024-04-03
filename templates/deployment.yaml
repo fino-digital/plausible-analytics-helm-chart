@@ -52,6 +52,8 @@ spec:
             - /entrypoint.sh
             - run
           env:
+            - name: SELFHOST
+              value: "true"
             {{- if .Values.google.clientID }}
             - name: GOOGLE_CLIENT_ID
               valueFrom:
@@ -235,6 +237,8 @@ spec:
             - -c
             - /entrypoint.sh db createdb && /entrypoint.sh db migrate
           env:
+            - name: SELFHOST
+              value: "true"
             {{- if .Values.database.enabled }}
             {{- if .Values.database.url }}
             - name: DATABASE_URL
