@@ -94,6 +94,9 @@ securityContext:
   # runAsUser: 1000
 
 service:
+  annotations:
+    {}
+  # meta.kubernetes.io/annotation: "value"
   type: ClusterIP
   port: 80
 
