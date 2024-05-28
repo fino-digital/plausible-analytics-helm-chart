@@ -7,6 +7,7 @@ disableRegistration: false # Disables registration of new users, keep your admin
 baseURL: # The hosting url of the server, used for URL generation. In production systems, this should be your ingress host.
 
 secretKeyBase: "" # Defaults to random 90 characters alphanumeric string if not set
+totpVaultKey: "" # Defaults to random 32 characters alphanumeric base64encoded string if not set
 
 database: # Postgres Database
   enabled: true
@@ -60,6 +61,7 @@ extraInitContainers: [] # Extra InitContainers that are passed down to plausible
 replicaCount: 1
 
 image:
+  registry: docker.io
   repository: plausible/analytics
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
@@ -94,8 +96,7 @@ securityContext:
   # runAsUser: 1000
 
 service:
-  annotations:
-    {}
+  annotations: {}
   # meta.kubernetes.io/annotation: "value"
   type: ClusterIP
   port: 80
