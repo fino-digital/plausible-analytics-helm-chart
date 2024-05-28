@@ -46,7 +46,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: {{ include "plausible-analytics.image" .}}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - /entrypoint.sh
@@ -229,7 +229,7 @@ spec:
         - name: plausible-init
           securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: {{ include "plausible-analytics.image" .}}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - /bin/sh
@@ -248,6 +248,11 @@ spec:
                   name: {{ include "plausible-analytics.fullname" . }}
             {{- end }}
             {{- end }}
+            - name: TOTP_VAULT_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: TOTP_VAULT_KEY
+                  name: {{ include "plausible-analytics.fullname" . }}
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
