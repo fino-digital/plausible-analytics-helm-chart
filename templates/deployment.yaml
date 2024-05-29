@@ -135,6 +135,11 @@ spec:
                   name: {{ include "plausible-analytics.fullname" . }}
             {{- end }}
             {{- end }}
+            - name: TOTP_VAULT_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: TOTP_VAULT_KEY
+                  name: {{ include "plausible-analytics.fullname" . }}
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
