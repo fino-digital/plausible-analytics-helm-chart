@@ -62,7 +62,7 @@ replicaCount: 1
 
 image:
   registry: docker.io
-  repository: plausible/analytics
+  repository: plausible/community-edition
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
