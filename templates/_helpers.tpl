@@ -65,5 +65,5 @@ Create the name of the service account to use
 Return the proper image name
 */}}
 {{- define "plausible-analytics.image" -}}
-{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
 {{- end }}
